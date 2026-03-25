@@ -16,6 +16,6 @@ spec:
     spec:
       containers:
       - name: resume-builder
-        image: mjdocker3112/resume-builder:v2
+        image: mjdocker3112/resume-builder:v2.2
         ports:
-        - containerPort: 3000
+        - containerPort: 80
