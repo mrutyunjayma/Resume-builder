@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: resume-builder
+  labels:
+    app: resume-builder
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: resume-builder
+  template:
+    metadata:
+      labels:
+        app: resume-builder
+    spec:
+      containers:
+      - name: resume-builder
+        image: mjdocker3112/resume-builder:v1.1
+        ports:
+        - containerPort: 3000
