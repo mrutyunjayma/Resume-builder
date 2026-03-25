@@ -1,10 +1,10 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: my-service
+  name: resume-builderSV
 spec:
   selector:
-    app: MyApp
+    app: resume-builder
   ports:
     - protocol: TCP
       port: 80
