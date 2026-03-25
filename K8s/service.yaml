@@ -3,6 +3,7 @@ kind: Service
 metadata:
   name: resume-builderSV
 spec:
+  type: NodePort
   selector:
     app: resume-builder
   ports:
