@@ -9,7 +9,7 @@ COPY package*.json ./
 RUN npm install
 
 COPY . .
-RUN npm build
+RUN npm run build
 
 #step 2: server using nginx
 FROM nginx:alpine
