@@ -112,8 +112,9 @@ resume-builder/
 │── public/
 │── src/
 │── Dockerfile
-│── deployment.yaml
-│── service.yaml
+│── K8s/
+  │── deployment.yaml
+  │──  service.yaml
 │── Jenkinsfile
 │── package.json
 ```
