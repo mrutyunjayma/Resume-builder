@@ -1,0 +1,64 @@
+pipeline {
+    agent any
+
+    environment {
+        IMAGE_NAME = "mjdocker3112/resume-builder:v3.1"
+    }
+
+    stages {
+
+        stage('Checkout Code') {
+            steps {
+                git branch: 'main', url: 'https://github.com/mrutyunjayma/Resume-builder.git'
+            }
+        }
+
+        stage('Trivy Scan (Filesystem)') {
+            steps {
+                sh '''
+                trivy fs --format table -o trivy-fs-report.txt .
+                '''
+            }
+        }
+
+        stage('Build Docker Image') {
+            steps {
+                sh 'docker build -t $IMAGE_NAME .'
+            }
+        }
+
+        stage('Trivy Scan (Image)') {
+            steps {
+                sh '''
+                trivy image --format table -o trivy-image-report.txt $IMAGE_NAME
+                '''
+            }
+        }
+
+        stage('Push to Docker Hub') {
+            steps {
+                withCredentials([usernamePassword(credentialsId: 'docker-cred', usernameVariable: 'USER', passwordVariable: 'PASS')]) {
+                    sh '''
+                    echo $PASS | docker login -u $USER --password-stdin
+                    docker push $IMAGE_NAME
+                    '''
+                }
+            }
+        }
+
+        stage('Deploy to Kubernetes') {
+            steps {
+                sh '''
+                kubectl apply -f K8s/deployment.yaml
+                kubectl apply -f K8s/service.yaml
+                '''
+            }
+        }
+    }
+
+    post {
+        always {
+            archiveArtifacts artifacts: '*.txt', fingerprint: true
+        }
+    }
+}
